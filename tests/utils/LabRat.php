@@ -20,7 +20,8 @@ class LabRat {
 
     protected function checkHealth()
     {
-        if(!file_exists($this->path)) {
+        if (!file_exists($this->path)) {
+
             throw new \ErrorException(
                 sprintf('Rat [%s] is dead', $this->path)
             );

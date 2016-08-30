@@ -96,7 +96,7 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
      */
     public function testRaceCondition() {
 
-        $this->conductExperiment('f4', function($manager, $rat) {
+        $this->conductExperiment('f4', function($manager) {
 
             $manager->upgrade();
 
@@ -110,7 +110,7 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
     public function testInvalidUpgradeCondition()
     {
 
-        $this->conductExperiment('f1', function($manager, $rat) {
+        $this->conductExperiment('f1', function($manager) {
 
             $manager->upgrade(new \stdClass());
 
@@ -122,7 +122,7 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
     public function testInvalidDowngradeCondition()
     {
 
-        $this->conductExperiment('f1', function($manager, $rat) {
+        $this->conductExperiment('f1', function($manager) {
 
             $manager->upgrade();
 
@@ -136,7 +136,7 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
     public function testInvalidHistoryCondition()
     {
 
-        $this->conductExperiment('f1', function($manager, $rat) {
+        $this->conductExperiment('f1', function($manager) {
 
             $manager->upgrade();
 
