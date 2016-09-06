@@ -1,12 +1,13 @@
 <?php
+
 /**
  * User: ArmiT <armit@twinscom.ru>
  */
 
 namespace transactions\tests\utils;
 
-class LabRat {
-
+class LabRat
+{
     protected $path;
 
     public function __construct($path)
@@ -21,23 +22,21 @@ class LabRat {
     protected function checkHealth()
     {
         if (!file_exists($this->path)) {
-
             throw new \ErrorException(
                 sprintf('Rat [%s] is dead', $this->path)
             );
         }
     }
 
-    public function inject($agent) {
-
+    public function inject($agent)
+    {
         $dump = $this->inspect();
         $dump[] = $agent;
         $this->fill($dump);
-
     }
 
-    public function ectomy($agent) {
-
+    public function ectomy($agent)
+    {
         $dump = $this->inspect();
         $dump = \array_diff($dump, [$agent]);
         $this->fill($dump);
@@ -68,5 +67,4 @@ class LabRat {
         $this->checkHealth();
         $this->fill([]);
     }
-
 }

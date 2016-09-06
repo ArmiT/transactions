@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User: ArmiT <armit@twinscom.ru>
  */
@@ -15,7 +16,6 @@ use transactions\tests\utils\LabRat;
  */
 class One implements PatchCompatible
 {
-
     public function getVersion()
     {
         return 31;
@@ -26,9 +26,9 @@ class One implements PatchCompatible
      */
     public function up()
     {
-
         $rat = new LabRat('f3');
         $rat->inject('one');
+
         return true;
     }
 
@@ -39,7 +39,7 @@ class One implements PatchCompatible
     {
         $rat = new LabRat('f3');
         $rat->ectomy('one');
+
         return true;
     }
-
 }
