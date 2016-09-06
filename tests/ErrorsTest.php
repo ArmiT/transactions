@@ -32,8 +32,6 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        \Closure::bind($onReady, $this, $this);
-
         $onReady($manager, $rat);
 
         return $rat;
@@ -96,11 +94,12 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
      */
     public function testRaceCondition() {
 
+        $this->expectException('transactions\errors\RaceConditionException');
+
         $this->conductExperiment('f4', function($manager) {
 
             $manager->upgrade();
 
-            $this->setExpectedException('transactions\errors\RaceConditionException');
         });
     }
 
@@ -110,11 +109,11 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
     public function testInvalidUpgradeCondition()
     {
 
+        $this->expectException('\InvalidArgumentException');
+
         $this->conductExperiment('f1', function($manager) {
 
             $manager->upgrade(new \stdClass());
-
-            $this->setExpectedException('\InvalidArgumentException');
 
         });
     }
@@ -122,13 +121,13 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
     public function testInvalidDowngradeCondition()
     {
 
+        $this->expectException('\InvalidArgumentException');
+
         $this->conductExperiment('f1', function($manager) {
 
             $manager->upgrade();
 
             $manager->downgrade(new \stdClass());
-
-            $this->setExpectedException('\InvalidArgumentException');
 
         });
     }
@@ -136,16 +135,15 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
     public function testInvalidHistoryCondition()
     {
 
+        $this->expectException('\InvalidArgumentException');
+
         $this->conductExperiment('f1', function($manager) {
 
             $manager->upgrade();
 
             $manager->getHistory(new \stdClass());
 
-            $this->setExpectedException('\InvalidArgumentException');
-
         });
     }
 
 }
-
