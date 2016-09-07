@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User: ArmiT <armit@twinscom.ru>
  */
@@ -25,11 +26,10 @@ class Three implements PatchCompatible
      */
     public function up()
     {
-
         $rat = new LabRat('f4');
         $rat->inject('three');
-        return true;
 
+        return true;
     }
 
     /**
@@ -39,7 +39,7 @@ class Three implements PatchCompatible
     {
         $rat = new LabRat('f4');
         $rat->ectomy('three');
+
         return true;
     }
-
 }

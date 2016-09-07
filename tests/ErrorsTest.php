@@ -1,34 +1,35 @@
 <?php
+
 /**
  * User: ArmiT <armit@twinscom.ru>
  */
 
 namespace transactions\tests;
 
+use transactions\loaders;
 use transactions\Manager;
 use transactions\storages;
-use transactions\loaders;
-use transactions\tests\utils;
 
 class ErrorsTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Prepare a rat
+     *
      * @param $generation
      * @param \Closure $onReady
+     *
      * @return utils\LabRat
      */
     protected function conductExperiment($generation, \Closure $onReady)
     {
-
         $rat = new utils\LabRat($generation);
         $rat->clearAnamnesis();
 
         $manager = new Manager(
-            new storages\BasicStorage(".storage.dat"), # a concrete implementation of history storage
-            new loaders\FileLoader( # a concrete implementation of vendor patches ()
-                __DIR__."/patches/".$generation,
-                "transactions\\tests\\patches\\".$generation
+            new storages\BasicStorage('.storage.dat'), // a concrete implementation of history storage
+            new loaders\FileLoader(// a concrete implementation of vendor patches ()
+                __DIR__.'/patches/'.$generation,
+                'transactions\\tests\\patches\\'.$generation
             )
         );
 
@@ -46,10 +47,10 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
         $rat->clearAnamnesis();
 
         $manager = new Manager(
-            new storages\BasicStorage(".storage.dat"),
+            new storages\BasicStorage('.storage.dat'),
             new loaders\FileLoader(
-                __DIR__."/patches/f1",
-                "transactions\\tests\\patches\\f1"
+                __DIR__.'/patches/f1',
+                'transactions\\tests\\patches\\f1'
             )
         );
 
@@ -57,14 +58,14 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $rat->inspect(),
-            ["one", "two", "three"]
+            ['one', 'two', 'three']
         );
 
         $manager->upgrade();
 
         $this->assertEquals(
             $rat->inspect(),
-            ["one", "two", "three"]
+            ['one', 'two', 'three']
         );
 
         $history = $manager->getHistory();
@@ -83,23 +84,20 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
                 1 => [
                     'version' => 1,
                     'className' => 'transactions\tests\patches\f1\One',
-                ]
+                ],
             ]
         );
-
     }
 
     /**
      * race condition
      */
-    public function testRaceCondition() {
-
+    public function testRaceCondition()
+    {
         $this->expectException('transactions\errors\RaceConditionException');
 
-        $this->conductExperiment('f4', function($manager) {
-
+        $this->conductExperiment('f4', function ($manager) {
             $manager->upgrade();
-
         });
     }
 
@@ -108,42 +106,32 @@ class ErrorsTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidUpgradeCondition()
     {
-
         $this->expectException('\InvalidArgumentException');
 
-        $this->conductExperiment('f1', function($manager) {
-
+        $this->conductExperiment('f1', function ($manager) {
             $manager->upgrade(new \stdClass());
-
         });
     }
 
     public function testInvalidDowngradeCondition()
     {
-
         $this->expectException('\InvalidArgumentException');
 
-        $this->conductExperiment('f1', function($manager) {
-
+        $this->conductExperiment('f1', function ($manager) {
             $manager->upgrade();
 
             $manager->downgrade(new \stdClass());
-
         });
     }
 
     public function testInvalidHistoryCondition()
     {
-
         $this->expectException('\InvalidArgumentException');
 
-        $this->conductExperiment('f1', function($manager) {
-
+        $this->conductExperiment('f1', function ($manager) {
             $manager->upgrade();
 
             $manager->getHistory(new \stdClass());
-
         });
     }
-
 }

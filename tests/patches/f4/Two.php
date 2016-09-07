@@ -1,14 +1,15 @@
 <?php
+
 /**
  * User: ArmiT <armit@twinscom.ru>
  */
 
 namespace transactions\tests\patches\f4;
 
+use transactions\loaders;
 use transactions\Manager;
 use transactions\PatchCompatible;
 use transactions\storages;
-use transactions\loaders;
 
 /**
  * Class One
@@ -27,17 +28,15 @@ class Two implements PatchCompatible
      */
     public function up()
     {
-
         $manager = new Manager(
-            new storages\BasicStorage(".storage.dat"),
+            new storages\BasicStorage('.storage.dat'),
             new loaders\FileLoader(
-                __DIR__."/patches/f1",
-                "transactions\\tests\\patches\\f1"
+                __DIR__.'/patches/f1',
+                'transactions\\tests\\patches\\f1'
             )
         );
 
         $manager->upgrade();
-
     }
 
     /**
@@ -47,5 +46,4 @@ class Two implements PatchCompatible
     {
         return true;
     }
-
 }

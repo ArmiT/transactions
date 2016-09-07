@@ -1,4 +1,5 @@
 <?php
+
 /**
  * User: ArmiT <armit@twinscom.ru>
  */
@@ -27,6 +28,7 @@ class Two implements PatchCompatible
     {
         $rat = new LabRat('f1');
         $rat->inject('two');
+
         return true;
     }
 
@@ -37,7 +39,7 @@ class Two implements PatchCompatible
     {
         $rat = new LabRat('f1');
         $rat->ectomy('two');
+
         return true;
     }
-
 }

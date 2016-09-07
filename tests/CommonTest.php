@@ -1,35 +1,35 @@
 <?php
+
 /**
  * User: ArmiT <armit@twinscom.ru>
  */
 
 namespace transactions\tests;
 
+use transactions\loaders;
 use transactions\Manager;
 use transactions\storages;
-use transactions\loaders;
-use transactions\tests\utils;
 
 class CommonTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Prepare a rat
+     *
      * @param $generation
      * @param \Closure $onReady
+     *
      * @return utils\LabRat
      */
     protected function conductExperiment($generation, \Closure $onReady)
     {
-
         $rat = new utils\LabRat($generation);
         $rat->clearAnamnesis();
 
         $manager = new Manager(
-            new storages\BasicStorage(".storage.dat"), # a concrete implementation of history storage
-            new loaders\FileLoader( # a concrete implementation of vendor patches ()
-                __DIR__."/patches/".$generation,
-                "transactions\\tests\\patches\\".$generation
+            new storages\BasicStorage('.storage.dat'), // a concrete implementation of history storage
+            new loaders\FileLoader(// a concrete implementation of vendor patches ()
+                __DIR__.'/patches/'.$generation,
+                'transactions\\tests\\patches\\'.$generation
             )
         );
 
@@ -45,10 +45,8 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidSafeLaunch()
     {
-
-        $this->conductExperiment('f1', function($manager, $rat) {
-
-            $manager->upgrade(); # apply all available migrations to the target system
+        $this->conductExperiment('f1', function ($manager, $rat) {
+            $manager->upgrade(); // apply all available migrations to the target system
 
             $this->assertEquals(
                 $rat->inspect(),
@@ -66,9 +64,7 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidSafeLaunch()
     {
-
-        $this->conductExperiment('f2', function($manager, $rat) {
-
+        $this->conductExperiment('f2', function ($manager, $rat) {
             $manager->upgrade();
 
             $this->assertEquals(
@@ -83,8 +79,7 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidSafeLaunch2()
     {
-        $this->conductExperiment('f3', function($manager, $rat) {
-
+        $this->conductExperiment('f3', function ($manager, $rat) {
             $manager->upgrade();
 
             $this->assertEquals(
@@ -99,13 +94,12 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testLaunchWithPartialApplying()
     {
-        $this->conductExperiment('f1', function($manager, $rat) {
-
+        $this->conductExperiment('f1', function ($manager, $rat) {
             $manager->upgrade(2);
 
             $this->assertEquals(
                 $rat->inspect(),
-                ["one", "two"]
+                ['one', 'two']
             );
         });
     }
@@ -115,21 +109,19 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testLaunchWithPartialDowngrade()
     {
-        $this->conductExperiment('f1', function($manager, $rat) {
-
+        $this->conductExperiment('f1', function ($manager, $rat) {
             $manager->upgrade(3);
 
             $this->assertEquals(
                 $rat->inspect(),
-                ["one", "two", "three"]
+                ['one', 'two', 'three']
             );
 
             $manager->downgrade(2);
             $this->assertEquals(
                 $rat->inspect(),
-                ["one"]
+                ['one']
             );
-
         });
     }
 
@@ -138,13 +130,12 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testLaunchWithFullDowngrade()
     {
-        $this->conductExperiment('f1', function($manager, $rat) {
-
+        $this->conductExperiment('f1', function ($manager, $rat) {
             $manager->upgrade();
 
             $this->assertEquals(
                 $rat->inspect(),
-                ["one", "two", "three"]
+                ['one', 'two', 'three']
             );
 
             $manager->downgrade();
@@ -152,7 +143,6 @@ class CommonTest extends \PHPUnit_Framework_TestCase
                 $rat->inspect(),
                 []
             );
-
         });
     }
 
@@ -161,13 +151,12 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFullHistory()
     {
-        $this->conductExperiment('f1', function($manager, $rat) {
-
+        $this->conductExperiment('f1', function ($manager, $rat) {
             $manager->upgrade();
 
             $this->assertEquals(
                 $rat->inspect(),
-                ["one", "two", "three"]
+                ['one', 'two', 'three']
             );
 
             $history = $manager->getHistory();
@@ -186,10 +175,9 @@ class CommonTest extends \PHPUnit_Framework_TestCase
                     1 => [
                         'version' => 1,
                         'className' => 'transactions\tests\patches\f1\One',
-                    ]
+                    ],
                 ]
             );
-
         });
     }
 
@@ -198,13 +186,12 @@ class CommonTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPartStory()
     {
-        $this->conductExperiment('f1', function($manager, $rat) {
-
+        $this->conductExperiment('f1', function ($manager, $rat) {
             $manager->upgrade();
 
             $this->assertEquals(
                 $rat->inspect(),
-                ["one", "two", "three"]
+                ['one', 'two', 'three']
             );
 
             $history = $manager->getHistory(2);
@@ -222,10 +209,6 @@ class CommonTest extends \PHPUnit_Framework_TestCase
                     ],
                 ]
             );
-
         });
     }
-
-
-
 }
